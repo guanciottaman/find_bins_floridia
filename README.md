@@ -1,2 +1,3 @@
-# find_bins_floridia
-A minimalistic website to find recycle bins in Floridia
+# Trova cestini a Floridia
+Mappa interattiva dei cestini della città con QR code. Scansionando il QR più vicino, vedi il cestino e altri vicini sulla mappa. 
+
