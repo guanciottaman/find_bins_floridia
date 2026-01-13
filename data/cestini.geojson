@@ -1,0 +1,41 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1,
+        "nome": "Cestino 1",
+        "tipo": "plastica"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.15268, 37.08197]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2,
+        "nome": "Cestino 2",
+        "tipo": "carta"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.15300, 37.08210]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3,
+        "nome": "Cestino 3",
+        "tipo": "plastica"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.15250, 37.08150]
+      }
+    }
+  ]
+}
