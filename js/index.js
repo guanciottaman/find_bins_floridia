@@ -44,27 +44,40 @@ let position_marker = L.circleMarker([lat, lon], {
   .bindPopup(`
       <div style="text-align:center;">
           <h3>La tua posizione</h3>
-          <button id="geolocateBtn">Mostrami la mia posizione</button>
+          <button id="geolocateBtn" style="
+                background-color: dodgerblue;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                padding: 4px 8px;
+                font-size: 12px;
+                cursor: pointer;
+            ": dodgerblue>Mostrami la mia posizione
+          </button>
       </div>`);
 
-// Apri il popup solo se vuoi di default
 if(open) position_marker.openPopup();
 
-// Aggiungi evento quando il popup si apre
 position_marker.on('popupopen', () => {
     const btn = document.getElementById('geolocateBtn');
     if(btn) {
         btn.addEventListener('click', () => {
             if(navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(pos => {
+                navigator.geolocation.watchPosition(pos => {
                     const { latitude, longitude } = pos.coords;
                     position_marker.setLatLng([latitude, longitude]);
                     map.setView([latitude, longitude], map.getZoom());
+                }, err => {
+                    console.error('Errore geolocalizzazione:', err);
+                }, {
+                    enableHighAccuracy: true,
+                    maximumAge: 1000,
+                    timeout: 5000
                 });
             } else {
-                alert("Geolocalizzazione non supportata dal browser");
+                alert('Geolocalizzazione non supportata');
             }
-        });
+        }, { once: true });
     }
 });
 
