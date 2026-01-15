@@ -21,10 +21,10 @@ const lat = parseFloat(params.get('lat'));
 const lon = parseFloat(params.get('lon'));
 const id = params.get('id');
 
-
-
-console.log(lat, lon, id);
-
+if (isNaN(lat) || isNaN(lon)) {
+    lat = 37.081973816466935;
+    lon = 15.152681789991972;
+}
 
 const map = L.map('map',
   {
