@@ -17,8 +17,8 @@ function addCestinoMarker(cestino, open = false) {
 
 const params = new URLSearchParams(window.location.search);
 
-const lat = parseFloat(params.get('lat'));
-const lon = parseFloat(params.get('lon'));
+let lat = parseFloat(params.get('lat'));
+let lon = parseFloat(params.get('lon'));
 const id = params.get('id');
 
 if (isNaN(lat) || isNaN(lon)) {
