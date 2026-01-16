@@ -1,12 +1,51 @@
-const binIcon = L.icon({
-    iconUrl: 'icons/bin.png',
+const indBinIcon = L.icon({
+    iconUrl: 'icons/bin-indifferenziata.png',
     iconSize: [36, 40],
     iconAnchor: [18, 40],
     popupAnchor: [0, -30]
 });
 
+const difBinIcon = L.icon({
+    iconUrl: 'icons/bin-differenziata.png',
+    iconSize: [36, 40],
+    iconAnchor: [18, 40],
+    popupAnchor: [0, -30]
+});
+
+const vetroBinIcon = L.icon({
+    iconUrl: 'icons/vetro.png',
+    iconSize: [36, 40],
+    iconAnchor: [18, 40],
+    popupAnchor: [0, -30]
+});
+
+const dogBinIcon = L.icon({
+    iconUrl: 'icons/dog.png',
+    iconSize: [36, 40],
+    iconAnchor: [18, 40],
+    popupAnchor: [0, -30]
+});
+
+const olioBinIcon = L.icon({
+    iconUrl: 'icons/olio.png',
+    iconSize: [36, 40],
+    iconAnchor: [18, 40],
+    popupAnchor: [0, -30]
+});
+
+const binIcons = {
+  indifferenziata: indBinIcon,
+  differenziata: difBinIcon,
+  vetro: vetroBinIcon,
+  olio: olioBinIcon,
+  "deiezioni canine": dogBinIcon
+};
+
+
+
 function addCestinoMarker(cestino, open = false) {
-    const marker = L.marker([cestino.lat, cestino.lon], {icon: binIcon}).addTo(map)
+    const icon = binIcons[cestino.tipo] || indBinIcon;
+    const marker = L.marker([cestino.lat, cestino.lon], {icon: icon}).addTo(map)
         .bindPopup(`
             <div style="text-align:center;">
                 <h3>${cestino.nome}</h3>
@@ -52,9 +91,12 @@ let position_marker = L.circleMarker([lat, lon], {
                 padding: 4px 8px;
                 font-size: 12px;
                 cursor: pointer;
-            ": dodgerblue>Mostrami la mia posizione
+            ">Mostrami la mia posizione
           </button>
       </div>`);
+
+
+let firstUpdate = true;
 
 if(open) position_marker.openPopup();
 
@@ -66,7 +108,10 @@ position_marker.on('popupopen', () => {
                 navigator.geolocation.watchPosition(pos => {
                     const { latitude, longitude } = pos.coords;
                     position_marker.setLatLng([latitude, longitude]);
-                    map.setView([latitude, longitude], map.getZoom());
+                    if(firstUpdate) {
+                        map.setView([latitude, longitude], map.getZoom());
+                        firstUpdate = false;
+                    }
                 }, err => {
                     console.error('Errore geolocalizzazione:', err);
                 }, {
@@ -82,17 +127,24 @@ position_marker.on('popupopen', () => {
 });
 
 fetch('data/cestini.geojson')
-  .then(res => res.json())
+  .then(res => {
+    console.log('fetch status:', res.status);
+    return res.json();
+  })
   .then(data => {
-    data.features.forEach(feature => {
-      addCestinoMarker({
-        lat: feature.geometry.coordinates[1],
-        lon: feature.geometry.coordinates[0],
-        nome: feature.properties.nome,
-        tipo: feature.properties.tipo
-      }, false);
+    data.features.forEach((feature, index) => {
+        const id = index + 1;
+        const name = `Cestino ${id}`;
+        addCestinoMarker({
+            lat: feature.geometry.coordinates[1],
+            lon: feature.geometry.coordinates[0],
+            nome: name,
+            tipo: feature.properties.tipo
+      });
     });
-  });
+  })
+  .catch(err => console.error('FETCH ERROR:', err));
+
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
