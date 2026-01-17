@@ -13,7 +13,31 @@
         <h1>Trova Cestini</h1>
     </nav>
     
-    <div id="map" style="height: 80vh;"></div>
+    <div id="map"></div>
+    <div id="filterBtn" title="Filtri cestini">⚙️</div>
+    <div id="filterPanel">
+        <h3>Filtra per tipo:</h3>
+        <label class="checkbox-label">
+            <input type="checkbox" value="indifferenziata" checked> Indifferenziata
+        </label>
+        <label class="checkbox-label">
+            <input type="checkbox" value="differenziata" checked> Differenziata
+        </label>
+        <label class="checkbox-label">
+            <input type="checkbox" value="vetro" checked> Vetro
+        </label>
+        <label class="checkbox-label">
+            <input type="checkbox" value="olio" checked> Olio
+        </label>
+        <label class="checkbox-label">
+            <input type="checkbox" value="deiezioni canine" checked> Deiezioni canine
+        </label>
+        <label class="checkbox-label">
+            <input type="checkbox" value="farmaci" checked> Farmaci
+        </label>
+    </div>
+
+
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="js/index.js"></script>

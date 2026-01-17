@@ -49,18 +49,7 @@ const binIcons = {
   farmaci: medBinIcon
 };
 
-
-
-function addCestinoMarker(cestino, open = false) {
-    const icon = binIcons[cestino.tipo] || indBinIcon;
-    const marker = L.marker([cestino.lat, cestino.lon], {icon: icon}).addTo(map)
-        .bindPopup(`
-            <div style="text-align:center;">
-                <h3>${cestino.nome}</h3>
-                <p>Tipo: ${cestino.tipo}</p>
-            </div>`);
-    if(open) marker.openPopup();
-}
+let cestini = []
 
 const params = new URLSearchParams(window.location.search);
 
@@ -91,6 +80,7 @@ function startGeolocation() {
                 map.setView([latitude, longitude], map.getZoom());
                 firstUpdate = false;
             }
+            map.closePopup();
         }, err => {
             console.error('Errore geolocalizzazione:', err);
         }, {
@@ -112,30 +102,14 @@ let position_marker = L.circleMarker([lat, lon], {
   .bindPopup(`
       <div style="text-align:center;">
           <h3>La tua posizione</h3>
-          <button onclick="startGeolocation()" id="geolocateBtn" style="
-                background-color: dodgerblue;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                padding: 4px 8px;
-                font-size: 12px;
-                cursor: pointer;
-            ">Mostrami la mia posizione
+          <button onclick="startGeolocation()" id="geolocateBtn">Mostrami la mia posizione
           </button>
       </div>`);
 
 
+
+
 let firstUpdate = true;
-
-
-/*position_marker.on('popupopen', () => {
-    const btn = document.getElementById('geolocateBtn');
-    if(btn) {
-        btn.addEventListener('click', () => {
-            
-        }, { once: true });
-    }
-});*/
 
 position_marker.openPopup();
 
@@ -148,20 +122,78 @@ fetch('data/cestini.geojson')
   .then(data => {
     data.features.forEach((feature, index) => {
         const id = index + 1;
+        const lat = feature.geometry.coordinates[1];
+        const lon = feature.geometry.coordinates[0];
         const name = `Cestino ${id}`;
-        addCestinoMarker({
-            lat: feature.geometry.coordinates[1],
-            lon: feature.geometry.coordinates[0],
+        const tipo = feature.properties.tipo
+        const icon = binIcons[tipo] || indBinIcon;
+        const marker = L.marker([lat, lon], {icon: icon}).addTo(map)
+            .bindPopup(`
+                <div style="text-align:center;">
+                    <h3>${name}</h3>
+                    <p>Tipo: ${tipo}</p>
+                    <button id="gotoBtn">Indicazioni</button>
+                </div>`);
+        marker.on('popupopen', () => {
+            const btn = marker.getPopup().getElement().querySelector('#gotoBtn');
+            if(btn) {
+                btn.addEventListener('click', () => {
+                    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
+                    window.open(url, '_blank');
+                });
+            }
+        });
+        marker.tipo = tipo;
+        const cestino = {
+            lat: lat,
+            lon: lon,
             nome: name,
-            tipo: feature.properties.tipo
-      });
+            icon: icon,
+            tipo: tipo,
+            marker: marker
+        }
+        cestini.push(cestino);
     });
   })
   .catch(err => console.error('FETCH ERROR:', err));
-
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 	subdomains: 'abcd',
 	maxZoom: 20
 }).addTo(map);
+
+const filterBtn = document.getElementById('filterBtn');
+const filterPanel = document.getElementById('filterPanel');
+
+filterBtn.addEventListener('click', () => {
+    filterPanel.style.display = filterPanel.style.display === 'block' ? 'none' : 'block';
+});
+
+document.addEventListener('click', (e) => {
+    if (!filterPanel.contains(e.target) && e.target !== filterBtn) {
+        filterPanel.style.display = 'none';
+    }
+});
+
+filterPanel.addEventListener('click', (e) => {
+    e.stopPropagation();
+});
+
+
+document.querySelectorAll('#filterPanel input[type="checkbox"]').forEach(checkbox => {
+    checkbox.checked = true;
+    checkbox.addEventListener('change', () => {
+        const tipo = checkbox.value;
+        const show = checkbox.checked;
+
+        cestini.forEach(cestino => {
+            if(cestino.tipo === tipo) {
+                if(show) map.addLayer(cestino.marker);
+                else map.removeLayer(cestino.marker);
+            }
+        });
+    });
+});
+
+
