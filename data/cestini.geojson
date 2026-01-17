@@ -27,6 +27,27 @@
     { "type": "Feature", "properties": { "tipo": "differenziata" }, "geometry": { "type": "Point", "coordinates": [15.148154, 37.086672] } },
     { "type": "Feature", "properties": { "tipo": "differenziata" }, "geometry": { "type": "Point", "coordinates": [15.148591, 37.086940] } },
     { "type": "Feature", "properties": { "tipo": "differenziata" }, "geometry": { "type": "Point", "coordinates": [15.149357, 37.087629] } },
-    { "type": "Feature", "properties": { "tipo": "indifferenziata" }, "geometry": { "type": "Point", "coordinates": [15.150138, 37.089449] } }
+    { "type": "Feature", "properties": { "tipo": "indifferenziata" }, "geometry": { "type": "Point", "coordinates": [15.150138, 37.089449] } },
+    { "type": "Feature", "properties": { "tipo": "indifferenziata" }, "geometry": { "type": "Point", "coordinates": [15.150486, 37.092411] } },
+    { "type": "Feature", "properties": { "tipo": "indifferenziato" }, "geometry": { "type": "Point", "coordinates": [15.150913, 37.092296] } },
+    { "type": "Feature", "properties": { "tipo": "deiezioni canine" }, "geometry": { "type": "Point", "coordinates": [15.151162, 37.092400] } },
+    { "type": "Feature", "properties": { "tipo": "olio" }, "geometry": { "type": "Point", "coordinates": [15.151334, 37.092505] } },
+
+    { "type": "Feature", "properties": { "tipo": "indifferenziato" }, "geometry": { "type": "Point", "coordinates": [15.158762, 37.080887] } },
+    { "type": "Feature", "properties": { "tipo": "differenziata" }, "geometry": { "type": "Point", "coordinates": [15.158647, 37.080300] } },
+    { "type": "Feature", "properties": { "tipo": "farmaci" }, "geometry": { "type": "Point", "coordinates": [15.158439, 37.080300] } },
+    { "type": "Feature", "properties": { "tipo": "indifferenziato" }, "geometry": { "type": "Point", "coordinates": [15.158446, 37.080080] } },
+
+    { "type": "Feature", "properties": { "tipo": "indifferenziato" }, "geometry": { "type": "Point", "coordinates": [15.159121, 37.081599] } },
+    { "type": "Feature", "properties": { "tipo": "indifferenziato" }, "geometry": { "type": "Point", "coordinates": [15.159228, 37.081827] } },
+    { "type": "Feature", "properties": { "tipo": "indifferenziato" }, "geometry": { "type": "Point", "coordinates": [15.159257, 37.081907] } },
+    { "type": "Feature", "properties": { "tipo": "indifferenziato" }, "geometry": { "type": "Point", "coordinates": [15.159498, 37.082483] } },
+    { "type": "Feature", "properties": { "tipo": "differenziata" }, "geometry": { "type": "Point", "coordinates": [15.159571, 37.082482] } },
+    { "type": "Feature", "properties": { "tipo": "indifferenziato" }, "geometry": { "type": "Point", "coordinates": [15.159385, 37.082450] } },
+    { "type": "Feature", "properties": { "tipo": "indifferenziato" }, "geometry": { "type": "Point", "coordinates": [15.159886, 37.083101] } },
+    { "type": "Feature", "properties": { "tipo": "indifferenziato" }, "geometry": { "type": "Point", "coordinates": [15.160002, 37.083397] } },
+    { "type": "Feature", "properties": { "tipo": "indifferenziato" }, "geometry": { "type": "Point", "coordinates": [15.159422, 37.083214] } },
+    { "type": "Feature", "properties": { "tipo": "indifferenziato" }, "geometry": { "type": "Point", "coordinates": [15.159587, 37.083178] } },
+    { "type": "Feature", "properties": { "tipo": "indifferenziato" }, "geometry": { "type": "Point", "coordinates": [15.159569, 37.083037] } }
   ]
 }

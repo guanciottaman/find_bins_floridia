@@ -33,12 +33,20 @@ const olioBinIcon = L.icon({
     popupAnchor: [0, -30]
 });
 
+const medBinIcon = L.icon({
+    iconUrl: 'icons/medicine.png',
+    iconSize: [36, 40],
+    iconAnchor: [18, 40],
+    popupAnchor: [0, -30]
+});
+
 const binIcons = {
   indifferenziata: indBinIcon,
   differenziata: difBinIcon,
   vetro: vetroBinIcon,
   olio: olioBinIcon,
-  "deiezioni canine": dogBinIcon
+  "deiezioni canine": dogBinIcon,
+  farmaci: medBinIcon
 };
 
 
@@ -74,6 +82,27 @@ const map = L.map('map',
   }
 )
 
+function startGeolocation() {
+    if(navigator.geolocation) {
+        navigator.geolocation.watchPosition(pos => {
+            const { latitude, longitude } = pos.coords;
+            position_marker.setLatLng([latitude, longitude]);
+            if(firstUpdate) {
+                map.setView([latitude, longitude], map.getZoom());
+                firstUpdate = false;
+            }
+        }, err => {
+            console.error('Errore geolocalizzazione:', err);
+        }, {
+            enableHighAccuracy: true,
+            maximumAge: 1000,
+            timeout: 5000
+        });
+    } else {
+        alert('Geolocalizzazione non supportata');
+    }
+}
+
 let position_marker = L.circleMarker([lat, lon], {
   radius: 6,
   color: '#0b37e7',
@@ -83,7 +112,7 @@ let position_marker = L.circleMarker([lat, lon], {
   .bindPopup(`
       <div style="text-align:center;">
           <h3>La tua posizione</h3>
-          <button id="geolocateBtn" style="
+          <button onclick="startGeolocation()" id="geolocateBtn" style="
                 background-color: dodgerblue;
                 color: white;
                 border: none;
@@ -98,33 +127,18 @@ let position_marker = L.circleMarker([lat, lon], {
 
 let firstUpdate = true;
 
-if(open) position_marker.openPopup();
 
-position_marker.on('popupopen', () => {
+/*position_marker.on('popupopen', () => {
     const btn = document.getElementById('geolocateBtn');
     if(btn) {
         btn.addEventListener('click', () => {
-            if(navigator.geolocation) {
-                navigator.geolocation.watchPosition(pos => {
-                    const { latitude, longitude } = pos.coords;
-                    position_marker.setLatLng([latitude, longitude]);
-                    if(firstUpdate) {
-                        map.setView([latitude, longitude], map.getZoom());
-                        firstUpdate = false;
-                    }
-                }, err => {
-                    console.error('Errore geolocalizzazione:', err);
-                }, {
-                    enableHighAccuracy: true,
-                    maximumAge: 1000,
-                    timeout: 5000
-                });
-            } else {
-                alert('Geolocalizzazione non supportata');
-            }
+            
         }, { once: true });
     }
-});
+});*/
+
+position_marker.openPopup();
+
 
 fetch('data/cestini.geojson')
   .then(res => {
