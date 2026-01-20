@@ -11,7 +11,16 @@
 <body>
     <nav>
         <h1>Trova Cestini</h1>
+        <div id="infoBtn" title="Info progetto">ℹ️</div>
+        
     </nav>
+    <div id="infoPanel">
+        <h3>Info progetto</h3>
+        <p>Il progetto nasce da una iniziativa di <strong>Agesci Floridia 1</strong> per sensibilizzare sull'inquinamento e per rendere Floridia un posto più pulito per tutti.</p>
+        <p>Questa mappa ti può aiutare a localizzare i cestini presenti in città.</p>
+        <p>Usa i filtri per vedere solo i tipi che ti interessano.</p>
+        <button id="closeInfoBtn">Chiudi</button>
+    </div>
     
     <div id="map"></div>
     <div id="filterBtn" title="Filtri cestini">⚙️</div>
@@ -35,6 +44,15 @@
         <label class="checkbox-label">
             <input type="checkbox" value="farmaci" checked> Farmaci
         </label>
+        <label style="margin-top: 10px; display:block;">
+            Mappa:
+            <select id="mapStyleSelect">
+                <option value="Giorno">Giorno</option>
+                <option value="Notte">Notte</option>
+                <option value="Satellite">Satellite</option>
+            </select>
+        </label>
+
     </div>
 
 

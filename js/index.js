@@ -103,11 +103,8 @@ let position_marker = L.circleMarker([lat, lon], {
       <div style="text-align:center;">
           <h3>La tua posizione</h3>
           <button onclick="startGeolocation()" id="geolocateBtn">Mostrami la mia posizione
-          </button>
+          </button>1
       </div>`);
-
-
-
 
 let firstUpdate = true;
 
@@ -157,23 +154,42 @@ fetch('data/cestini.geojson')
   })
   .catch(err => console.error('FETCH ERROR:', err));
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-	subdomains: 'abcd',
-	maxZoom: 20
-}).addTo(map);
+const dayLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+    subdomains: 'abcd',
+    minZoom: 15,
+    maxZoom: 20
+});
+
+const nightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+    subdomains: 'abcd',
+    minZoom: 15,
+    maxZoom: 20
+});
+
+const satelliteLayer = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.{ext}', {
+    attribution: '&copy; CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    minZoom: 15,
+    maxZoom: 20,
+    ext: 'jpg'
+});
+
+dayLayer.addTo(map);
+
+
+let currentBaseLayer = dayLayer;
 
 const filterBtn = document.getElementById('filterBtn');
 const filterPanel = document.getElementById('filterPanel');
 
-filterBtn.addEventListener('click', () => {
-    filterPanel.style.display = filterPanel.style.display === 'block' ? 'none' : 'block';
+filterBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    filterPanel.classList.toggle('open');
 });
 
-document.addEventListener('click', (e) => {
-    if (!filterPanel.contains(e.target) && e.target !== filterBtn) {
-        filterPanel.style.display = 'none';
-    }
+document.addEventListener('click', () => {
+    filterPanel.classList.remove('open');
 });
 
 filterPanel.addEventListener('click', (e) => {
@@ -195,5 +211,57 @@ document.querySelectorAll('#filterPanel input[type="checkbox"]').forEach(checkbo
         });
     });
 });
+
+const mapStyleSelect = document.getElementById('mapStyleSelect');
+
+function setTheme() {
+    map.removeLayer(currentBaseLayer);
+
+    const value = mapStyleSelect.value;
+
+    if (value === 'Giorno') {
+        currentBaseLayer = dayLayer;
+    }
+    else if (value === 'Notte') {
+        currentBaseLayer = nightLayer;
+    }
+    else if (value === 'Satellite') {
+        currentBaseLayer = satelliteLayer;
+    }
+
+    localStorage.setItem('mapTheme', value);
+
+    currentBaseLayer.addTo(map);
+    filterPanel.classList.remove('open');
+
+}
+
+const savedTheme = localStorage.getItem('mapTheme');
+
+if (savedTheme) {
+    mapStyleSelect.value = savedTheme;
+    setTheme();
+}
+
+mapStyleSelect.addEventListener('change', () => setTheme());
+
+const infoBtn = document.getElementById('infoBtn');
+const infoPanel = document.getElementById('infoPanel');
+const closeInfoBtn = document.getElementById('closeInfoBtn');
+
+infoBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    infoPanel.style.display = infoPanel.style.display === 'block' ? 'none' : 'block';
+});
+
+closeInfoBtn.addEventListener('click', () => {
+    infoPanel.style.display = 'none';
+});
+
+document.addEventListener('click', () => {
+    infoPanel.style.display = 'none';
+});
+
+infoPanel.addEventListener('click', (e) => e.stopPropagation());
 
 
